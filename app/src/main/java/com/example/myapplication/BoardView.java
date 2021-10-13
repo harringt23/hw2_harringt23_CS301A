@@ -54,9 +54,6 @@ public class BoardView extends SurfaceView
     // initialize a new array of squares in the game (16 squares on the board)
     private ArrayList<Square> board;
 
-    // create an array to track positions of squares
-    private ArrayList<Integer> sqNumbers;
-
     // create a boolean to track if the game is over
     private boolean solved;
 
@@ -68,6 +65,9 @@ public class BoardView extends SurfaceView
     /* BoardView
      *
      * Constructor for BoardView to initialize the instance/member variables.
+     *
+     * @param context - interface providing global information
+     * @param attributeSet - the current attribute set from XML documents
      */
     public BoardView(Context context, AttributeSet attributeSet)
     {
@@ -97,13 +97,12 @@ public class BoardView extends SurfaceView
      * Initialize the board to a random setup / numbers are placed in random
      * positions.
      *
-     * TODO - ensure that the board returns properly since instance/member variable
      */
     public void initBoard()
     {
         // initialize the list of numbers that a square can hold as a value
         // 0 represents empty, 15 is the max
-        sqNumbers = new ArrayList<>(sqTotal);
+        ArrayList<Integer> sqNumbers = new ArrayList<>(sqTotal);
         for (int sqNum = 0; sqNum < sqTotal; sqNum++)
         {
             sqNumbers.add(sqNum);
@@ -150,7 +149,6 @@ public class BoardView extends SurfaceView
      * be set/remain red depending on if was initially in the incorrect spot or if it
      * moved to the wrong spot.
      *
-     *
      *  */
     public void sqCorrectPosition()
     {
@@ -194,13 +192,36 @@ public class BoardView extends SurfaceView
         // draw the squares onto the canvas
         for(Square sq: board) sq.draw(canvas);
     }
-    
+
+    /* onClick
+     *
+     * This method overrides the onClick method to read when the user has
+     * clicked on the reset button. By doing this, the board will be re-initialized
+     * and the current view will be invalidated so the new canvas may be drawn.
+     *
+     * @param view - the view that will be overwritten
+     */
     @Override
     public void onClick(View view)
     {
+        // generate the new board
+        initBoard();
 
+        // invalidate the current view
+        invalidate();
     }
 
+    /* onTouch
+     *
+     * This method overrides the onTouch method to correctly calculate where the
+     * user is attempting to move the square. Since there is only one position
+     * the user can possible move the square to (as there is only one empty square)
+     * the coordinates the user presses on can be used to determine if it is next
+     * to an empty, and if it is, swap the squares.
+     *
+     * @param view - the current view where the user's touch will be found
+     * @param motionEvent - the motion event of the user
+     */
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent)
     {

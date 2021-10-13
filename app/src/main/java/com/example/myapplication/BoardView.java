@@ -225,6 +225,40 @@ public class BoardView extends SurfaceView
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent)
     {
+        // determine the square to be moved
+        int sqMove;
+
+        // verify the user pressed the screen
+        if (motionEvent.getActionMasked() == MotionEvent.ACTION_DOWN)
+        {
+            // determine the number of the square pressed down
+            sqMove = findSquare(motionEvent.getX(), motionEvent.getY());
+
+        }
+
+
+        // if invalid touch or unable to swap keep view the same
         return false;
+    }
+
+    /* findSquare
+     *
+     * This method takes in the x and y coordinates that the user pressed on
+     * and returns the square that is in that approximate vicinity.
+     *
+     * @param x - the x coordinate where the user pressed
+     * @param y - the y coordinate where the user pressed
+     */
+    public int findSquare(float x, float y)
+    {
+        // determine the x and y coordinate within the board
+        int xBoard = (int) ((x - boardLeft) / sqSize);
+        int yBoard = (int) ((y - boardTop) / sqSize);
+
+        // determine if the square is out of bounds
+        if (xBoard >= sqPerRow | yBoard >= sqPerRow) return -1;
+
+        // otherwise return the number of the square
+        return xBoard + (yBoard * sqPerRow);
     }
 }

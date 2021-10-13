@@ -40,9 +40,15 @@ public class BoardView extends SurfaceView
     private final float boardTop = 200;
     private final float boardLeft = 100;
 
+    // initialize the background color of the board
+    private final Paint backgroundColor = new Paint();
+
     // initialize the size of the board based on the number of squares per row
     private final int sqSize = boardWidth / sqPerRow;
 
+    // set a new paint variable for the correct and incorrect position
+    private final Paint correctPosition = new Paint();
+    private final Paint incorrectPosition = new Paint();
 
     /* Instance/Member Variables */
     // initialize a new array of squares in the game (16 squares on the board)
@@ -57,9 +63,7 @@ public class BoardView extends SurfaceView
     // track where the empty square is
     private float blankSqLeft, blankSqTop;
 
-    // set a new paint variable for the correct and incorrect position
-    private final Paint correctPosition;
-    private final Paint incorrectPosition;
+
 
     /* BoardView
      *
@@ -74,19 +78,17 @@ public class BoardView extends SurfaceView
         setWillNotDraw(false);
 
         // initialize paint for correct and incorrect positions
-        correctPosition = new Paint();
         correctPosition.setColor(Color.GREEN);
-        incorrectPosition = new Paint();
         incorrectPosition.setColor(Color.RED);
+
+        // initialize paint for the background color of the board
+        backgroundColor.setColor(Color.BLACK);
 
         // initialize the board to a random set up
         initBoard();
 
         // initialize solved to false
         solved = false;
-
-        // determine if any squares are in the correct position
-        sqCorrectPosition();
 
     }
 
@@ -136,6 +138,9 @@ public class BoardView extends SurfaceView
                 }
             }
         }
+
+        // determine if any squares are in the correct position
+        sqCorrectPosition();
     }
 
     /* sqCorrectPosition
@@ -182,27 +187,12 @@ public class BoardView extends SurfaceView
     @Override
     public void onDraw(Canvas canvas)
     {
-        // iterate through the board to determine if whether the user dragged or not 
-    }
-    
-    /* blankSqLoc 
-     *
-     * Determine the positioning of the blank square.
-     */
-    public void setBlankSqLoc()
-    {
-/*        // iterate through the board
-        for (int x = 0; x < boardSize; x++)
-        {
-            for (int y = 0; y < boardSize; y++)
-            {
-                // if it's the blank space determine the current value of it
-                if (board[x][y].getSqNumber() == boardSize * boardSize)
-                {
-                    blankSqLeft = board[x][y].getSqLeft();
-                }
-            }
-        }*/
+        // draw the background of the board onto the surface view
+        canvas.drawRect(boardLeft, boardTop, boardLeft +boardWidth,
+                boardTop + boardWidth, backgroundColor);
+
+        // draw the squares onto the canvas
+        for(Square sq: board) sq.draw(canvas);
     }
     
     @Override

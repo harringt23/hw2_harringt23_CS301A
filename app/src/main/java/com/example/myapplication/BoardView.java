@@ -51,20 +51,15 @@ public class BoardView extends SurfaceView
     // create an array to track positions of squares
     private ArrayList<Integer> sqNumbers;
 
-    // track the coordinates of the square being dragged
-    private float userInitLeft, userInitTop, userDragLeft, userDragTop;
+    // create a boolean to track if the game is over
+    private boolean solved;
 
     // track where the empty square is
     private float blankSqLeft, blankSqTop;
 
-    // track where the the square user drags
-    private int userSqLeft, userSqTop;
-
-    // determine whether the user dragged the square and when count starts
-    private boolean userDragged, timeStart;
-
     // set a new paint variable for the correct and incorrect position
-    private Paint correctPosition, incorrectPosition;
+    private final Paint correctPosition;
+    private final Paint incorrectPosition;
 
     /* BoardView
      *
@@ -74,24 +69,6 @@ public class BoardView extends SurfaceView
     {
         // call super to call the parent constructor of SurfaceView
         super(context, attributeSet);
-
-        // initialize the array of possible numbers
-        //sqNumbers = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
-
-        // initialize where user initially drags and ends dragging
-/*        userInitLeft = -1;
-        userInitTop = -1;
-        userDragLeft = -1;
-        userDragTop = -1;*/
-
-        // initialize the user's choice of square
-        userSqLeft = -1;
-        userSqTop = -1;
-
-        // initialize user dragged and time has started to false since game
-        // has not begun
-        userDragged = false;
-        timeStart = false;
 
         // initialize the surface view to draw
         setWillNotDraw(false);
@@ -105,6 +82,11 @@ public class BoardView extends SurfaceView
         // initialize the board to a random set up
         initBoard();
 
+        // initialize solved to false
+        solved = false;
+
+        // determine if any squares are in the correct position
+        sqCorrectPosition();
 
     }
 
@@ -119,8 +101,8 @@ public class BoardView extends SurfaceView
     {
         // initialize the list of numbers that a square can hold as a value
         // 0 represents empty, 15 is the max
-        sqNumbers = new ArrayList<Integer>(sqTotal);
-        for (int sqNum = 0; sqNum <= 15; sqNum++)
+        sqNumbers = new ArrayList<>(sqTotal);
+        for (int sqNum = 0; sqNum < sqTotal; sqNum++)
         {
             sqNumbers.add(sqNum);
         }
@@ -129,7 +111,7 @@ public class BoardView extends SurfaceView
         Collections.shuffle(sqNumbers);
 
         // instantiate the list of squares via the randomly shuffled integers
-        board = new ArrayList<Square>(sqTotal);
+        board = new ArrayList<>(sqTotal);
 
         // iterate through the squares and assign each square a position on the board
         for (int x = 0; x < sqPerRow; x++) 
@@ -141,11 +123,11 @@ public class BoardView extends SurfaceView
 
                 // find the current square's index by the col + currNum
                 int sqIndex = y + currNum;
-                Square sq = new Square(boardLeft + sqSize * y,
-                        boardTop + sqSize * x, sqNumbers.get(currNum));
 
-                // add the square to the list
-                board.add(sq);
+                // add the new square to the board
+                board.add(new Square(boardLeft + sqSize * y,
+                        boardTop + sqSize * x, sqNumbers.get(currNum)));
+
 
                 // determine the current value of the blank square
                 if (sqNumbers.get(currNum) == 0) {
@@ -156,26 +138,38 @@ public class BoardView extends SurfaceView
         }
     }
 
-    /* randomSqNum
+    /* sqCorrectPosition
      *
-     * Returns a random number between 1 and 15 to initialize the board.
+     * This method determines whether the square is in the correct place on the board.
+     * If it is in the correct place, the color will be set to green otherwise it will
+     * be set/remain red depending on if was initially in the incorrect spot or if it
+     * moved to the wrong spot.
      *
-     * @return randSq - the random number the square will hold
-     */
-/*    public int randSqNum() {
-        // initialize a random number between 0 and 16
-        int randSq = (int) (Math.random() * boardSize);
+     *
+     *  */
+    public void sqCorrectPosition()
+    {
+        // reset solved to true
+        solved = true;
 
-        // if the number is not zero, then return the random number
-        if (sqNumbers[randSq] != 0)
+        // initialize a variable to track the current square number
+        Square currSq;
+
+        // determine if the current index is the current value
+        for (int x = 1; x < sqTotal; x++)
         {
-            sqNumbers[randSq] = 0;
-            return  randSq + 1;
-        }
+            currSq = board.get(x);
 
-        // if already chosen, generate a new random number
-        return randSqNum();
-    }*/
+            if (currSq.getSqNumber() != x) 
+            {
+                // set the current square to red
+                currSq.setSqColor(incorrectPosition);
+                // set solved to false
+                solved = false;
+            }
+            else currSq.setSqColor(correctPosition);
+        }
+    }
 
     /* onDraw
      *
@@ -189,40 +183,6 @@ public class BoardView extends SurfaceView
     public void onDraw(Canvas canvas)
     {
         // iterate through the board to determine if whether the user dragged or not 
-    }
-
-    /* correctPosition
-     *
-     * This method determines whether the square is in the correct place on the board.
-     * If it is in the correct place, the color will be set to green otherwise it will
-     * be set/remain red depending on if was initially in the incorrect spot or if it 
-     * moved to the wrong spot.
-     * 
-     * 
-     *  */
-    public void correctPosition()
-    {
-     /*   // iterate through the board to determine whether the user is dragging and if
-        // so, if the position is correct
-        for (int x = 0; x < boardSize; x++)
-        {
-            for (int y = 0; y < boardSize; y++)
-            {
-                // if the user did not drag, determine if the positioning is correct
-                if (!userDragged)
-                {
-                    // calculate the current number of the board
-                    int currNum = (x * 4) + y + 1;
-
-                    // determine if the square is in the correct position
-                    if (board[x][y].getSqNumber() == currNum)
-                    {
-                        board[x][y].setSqColor(correctPosition);
-                    }
-                    else board[x][y].setSqColor(incorrectPosition);
-                }
-            }
-        }*/
     }
     
     /* blankSqLoc 

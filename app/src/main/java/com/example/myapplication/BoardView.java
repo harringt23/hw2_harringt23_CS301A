@@ -232,7 +232,11 @@ public class BoardView extends SurfaceView
         if (motionEvent.getActionMasked() == MotionEvent.ACTION_DOWN)
         {
             // determine the number of the square pressed down
-            sqMove = findSquare(motionEvent.getX(), motionEvent.getY());
+            //sqMove = findSquare(motionEvent.getX(), motionEvent.getY());
+            float x = motionEvent.getX();
+            float y = motionEvent.getY();
+
+            // check
 
         }
 
@@ -244,10 +248,11 @@ public class BoardView extends SurfaceView
     /* findSquare
      *
      * This method takes in the x and y coordinates that the user pressed on
-     * and returns the square that is in that approximate vicinity.
+     * and returns the index of the square in the array list.
      *
      * @param x - the x coordinate where the user pressed
      * @param y - the y coordinate where the user pressed
+     * @return the index of the square
      */
     public int findSquare(float x, float y)
     {
@@ -261,4 +266,27 @@ public class BoardView extends SurfaceView
         // otherwise return the number of the square
         return xBoard + (yBoard * sqPerRow);
     }
+
+    /* swapSquare
+     *
+     * This method verifies that the square is able to be swapped based on the
+     * numeric value of the index passed in.
+     *
+     * @param sqMove - the index of the square that will be swapped with the blank square
+     * @return whether the swap was successful
+     */
+    public boolean swapSquare(int sqMov)
+    {
+
+        return false;
+    }
+
+    /* checkAbove
+     *
+     * This is a helper method determining if the square to be swapped is the
+     * square above it.
+     *
+     * @param canvas - the canvas that will be drawn onto the surface view
+     */
+
 }

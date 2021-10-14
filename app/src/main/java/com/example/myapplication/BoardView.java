@@ -8,9 +8,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 /* BoardView Class
@@ -127,7 +125,7 @@ public class BoardView extends SurfaceView
                 // initialize the size of the board based on the number of squares per row
                 int sqSize = boardWidth / sqPerRow;
                 board.add(new Square(boardLeft + sqSize * y,
-                        boardTop + sqSize * x, sqNumbers.get(currNum)));
+                        boardTop + sqSize * x, sqNumbers.get(sqIndex)));
 
 
                 // determine the current value of the blank square

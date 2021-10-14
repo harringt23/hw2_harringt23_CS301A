@@ -18,7 +18,6 @@ public class Square
     /* Instance Variables */
     // track where the square is positioned
     private float sqLeft, sqTop;
-    private final int sqSize = 200;
     // track what number is on the tile
     private int sqNumber;
     // create paint variables for the text and square color
@@ -75,6 +74,7 @@ public class Square
     public void draw(Canvas canvas)
     {
         // draw the square onto the canvas based on the coordinates
+        int sqSize = 200;
         canvas.drawRect(sqLeft, sqTop, sqLeft + sqSize, sqTop + sqSize, sqColor);
 
         // draw the text onto the square
@@ -90,14 +90,6 @@ public class Square
      * */
     public float getSqLeft() { return sqLeft; }
 
-    /* setSqNumber
-     *
-     * Sets the current square left coordinate.
-     *
-     * @param newNumber - the current square number
-     * */
-    public void setSqLeft(float newLeft) { sqLeft = newLeft; }
-
     /* getSqTop
      *
      * Returns the current square top coordinate.
@@ -105,14 +97,6 @@ public class Square
      * @return sqNumber - the current square number
      * */
     public float getSqTop() { return sqTop; }
-
-    /* setSqNumber
-     *
-     * Sets the current square top coordinate.
-     *
-     * @param newNumber - the current square number
-     * */
-    public void setSqTop(float newTop) { sqTop = newTop; }
 
     /* getSqNumber
      *
@@ -125,27 +109,6 @@ public class Square
         return sqNumber;
     }
 
-    /* setSqNumber
-     *
-     * Sets the current square number.
-     *
-     * @param newNumber - the current square number
-     * */
-    public void setSqNumber(int newNumber)
-    {
-        sqNumber = newNumber;
-    }
-
-    /* getSqColor
-     *
-     * Returns the current square number.
-     *
-     * @return sqNumber - the current square number
-     * */
-    public Paint getSqColor()
-    {
-        return sqColor;
-    }
 
     /* setSqColor
      *

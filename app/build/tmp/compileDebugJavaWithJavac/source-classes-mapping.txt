@@ -1,0 +1,8 @@
+com/example/myapplication/BuildConfig.java
+ com.example.myapplication.BuildConfig
+com/example/myapplication/MainActivity.java
+ com.example.myapplication.MainActivity
+com/example/myapplication/BoardView.java
+ com.example.myapplication.BoardView
+com/example/myapplication/Square.java
+ com.example.myapplication.Square

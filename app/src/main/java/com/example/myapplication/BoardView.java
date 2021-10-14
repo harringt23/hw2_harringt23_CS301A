@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
@@ -28,9 +29,13 @@ public class BoardView extends SurfaceView
 {
     /* Constant Variables */
     // initialize the width, top, and left of the board
-    private final int boardWidth = 1000;
-    private final float boardTop = 200;
-    private final float boardLeft = 100;
+    private final int boardWidth = 1800;
+    private final float boardTop = 25;
+    private final float boardLeft = 25;
+
+    // initialize the size of the board based on the number of squares per row
+    private int sqSize;
+
 
     // initialize the background color of the board
     private final Paint backgroundColor = new Paint();
@@ -41,8 +46,8 @@ public class BoardView extends SurfaceView
 
     /* Instance/Member Variables */
     // initialize the size of the rows and board
-    private int sqPerRow;
-    private final int sqTotal = sqPerRow * sqPerRow;
+    private final int sqPerRow = 4;
+    private final int sqTotal = 15;
 
     // initialize a new array of squares in the game (16 squares on the board)
     private ArrayList<Square> board;
@@ -78,8 +83,17 @@ public class BoardView extends SurfaceView
         // initialize paint for the background color of the board
         backgroundColor.setColor(Color.BLACK);
 
-        // initialize the size of the rows
-        sqPerRow = 4;
+        // initialize the size of the rows and total squares
+        //sqPerRow = 4;
+        //sqTotal = sqPerRow * sqPerRow;
+
+        // initialize the square size
+        sqSize = boardWidth / sqPerRow;
+
+        // initialize the blank square's values
+        blankSqLeft = -1.0F;
+        blankSqTop = -1.0F;
+        blankSqIndex = -1;
 
         // initialize the board to a random set up
         initBoard();
@@ -98,10 +112,10 @@ public class BoardView extends SurfaceView
     public void initBoard()
     {
         // initialize the list of numbers that a square can hold as a value
-        ArrayList<Integer> sqNumbers = new ArrayList<>(sqTotal);
+        ArrayList<Integer> sqNumbers = new ArrayList<>();
 
         // add 1 through 16 where 16 will be the empty
-        for (int sqNum = 1; sqNum <= sqTotal; sqNum++)
+        for (int sqNum = 1; sqNum <= sqTotal + 1; sqNum++)
         {
             sqNumbers.add(sqNum);
         }
@@ -110,33 +124,27 @@ public class BoardView extends SurfaceView
         // shuffle the board to create random numbering
         Collections.shuffle(sqNumbers);
 
-        // initialize the size of the board based on the number of squares per row
-        int sqSize = boardWidth / sqPerRow;
-
         // instantiate the list of squares via the randomly shuffled integers
-        board = new ArrayList<>(sqTotal);
+        board = new ArrayList<>();
 
         // iterate through the squares and assign each square a position on the board
         for (int x = 0; x < sqPerRow; x++) 
         {
             for (int y = 0; y < sqPerRow; y++) 
             {
-                // find the current number value in array
-                int currNum = x * sqPerRow;
-
                 // find the current square's index by the col + currNum
-                int sqIndex = y + currNum;
+                int sqIndex = y + (x * sqPerRow);
 
                 // add the new square to the board
                 board.add(new Square(boardLeft + sqSize * y,
                         boardTop + sqSize * x, sqNumbers.get(sqIndex)));
 
-                // determine the current value of the blank square
-                if (sqNumbers.get(currNum) == 16)
+                // determine the current values of the blank square
+                if (sqNumbers.get(sqIndex) == 16)
                 {
-                    blankSqTop = y;
                     blankSqLeft = x;
-                    blankSqIndex = currNum;
+                    blankSqTop = y;
+                    blankSqIndex = sqIndex;
                 }
             }
         }
@@ -162,13 +170,14 @@ public class BoardView extends SurfaceView
         Square currSq;
 
         // determine if the current index is the current value
-        for (int sqNum = 1; sqNum < sqTotal; sqNum++)
+        for (int sqNum = 0; sqNum < sqTotal; sqNum++)
         {
             // get the current square
             currSq = board.get(sqNum);
 
             // determine if the square is in the correct position
-            if (currSq.getSqNumber() != sqNum)
+            // TODO - check why never sets to correct position
+            if (currSq.getSqNumber() - 1 != sqNum)
             {
                 // if not empty set the current square to red
                 currSq.setSqColor(incorrectPosition);
@@ -257,6 +266,8 @@ public class BoardView extends SurfaceView
                 // return true
                 return true;
             }
+            // otherwise return false
+            else return false;
 
         }
 
@@ -276,11 +287,22 @@ public class BoardView extends SurfaceView
     public boolean checkSwap(float xTap, float yTap)
     {
         // determine the index of the square the user tapped w/ respect to board
-        int xBoard = (int) ((xTap - boardLeft) / sqPerRow);
-        int yBoard = (int) ((yTap - boardTop) / sqPerRow);
+        int xBoard = (int) (xTap - boardLeft) / sqSize;
+        int yBoard = (int) (yTap - boardTop) / sqSize;
+
+        // TESTING
+        Log.d("debugSwap", "SWAP CALLED");
+        Log.i("boardX", String.valueOf(xBoard));
+        Log.i("numberX", String.valueOf(xTap));
+        Log.i("boardY", String.valueOf(yBoard));
+        Log.i("numberY", String.valueOf(yTap));
 
         // determine if the board coordinates are valid
-        if (xBoard >= sqPerRow || yBoard <= sqPerRow) return false;
+        if (xBoard >= sqPerRow || yBoard >= sqPerRow)
+        {
+            Log.d("outBoundsSwap", "OUT OF BOUNDS CALLED");
+            return false;
+        }
 
         // otherwise determine the square tapped
         int sqIndex = (int)(xBoard + ( yBoard * sqPerRow));

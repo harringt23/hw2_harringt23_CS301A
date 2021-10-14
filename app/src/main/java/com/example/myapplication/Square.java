@@ -17,8 +17,8 @@ public class Square
 {
     /* Instance Variables */
     // track where the square is positioned
-    private final float sqLeft;
-    private final float sqTop;
+    private float sqLeft;
+    private float sqTop;
 
     // initialize square size
     private int sqSize;
@@ -40,7 +40,7 @@ public class Square
         sqTop = top;
 
         // set the square size
-        sqSize = 200;
+        sqSize = 400;
 
         // set the number of the square
         sqNumber = number;

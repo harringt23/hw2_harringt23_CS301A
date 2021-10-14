@@ -17,9 +17,15 @@ public class Square
 {
     /* Instance Variables */
     // track where the square is positioned
-    private float sqLeft, sqTop;
+    private final float sqLeft;
+    private final float sqTop;
+
+    // initialize square size
+    private int sqSize;
+
     // track what number is on the tile
-    private String sqNumber;
+    private int sqNumber;
+
     // create paint variables for the text and square color
     private Paint sqColor;
     private final Paint textColor;
@@ -27,11 +33,14 @@ public class Square
     /* Square Constructor
      * Initializes the instance/member variables for the square object.
      */
-    public Square(float left, float top, String number)
+    public Square(float left, float top, int number)
     {
         // set the square's coordinates to the parameters passed in
         sqLeft = left;
         sqTop = top;
+
+        // set the square size
+        sqSize = 200;
 
         // set the number of the square
         sqNumber = number;
@@ -59,6 +68,7 @@ public class Square
         // set the square's parameters to the initial square passed in
         this.sqLeft = initSq.sqLeft;
         this.sqTop = initSq.sqTop;
+        this.sqSize = initSq.sqSize;
         this.sqNumber = initSq.sqNumber;
         this.sqColor = new Paint(initSq.sqColor);
         this.textColor = new Paint(initSq.textColor);
@@ -74,14 +84,18 @@ public class Square
     public void draw(Canvas canvas)
     {
         // draw the square onto the canvas based on the coordinates
-        float sqSize = 200;
         canvas.drawRect(sqLeft, sqTop, sqLeft + sqSize, sqTop + sqSize, sqColor);
 
         // set the text size to
         textColor.setTextSize(50);
 
-        // draw the text onto the square
-        canvas.drawText(sqNumber, sqLeft + sqSize / 2, sqTop + sqSize / 2, textColor);
+        // draw the number onto the square
+        if (sqNumber != 16) {
+            canvas.drawText(String.valueOf(sqNumber), sqLeft + sqSize / 2, sqTop + sqSize / 2, textColor);
+        }
+        else {
+            canvas.drawText("", sqLeft + sqSize / 2, sqTop + sqSize / 2, textColor);
+        }
     }
 
     /* getSqLeft
@@ -106,7 +120,7 @@ public class Square
      *
      * @return sqNumber - the current square number
      * */
-    public String getSqNumber()
+    public int getSqNumber()
     {
         return sqNumber;
     }
@@ -116,7 +130,7 @@ public class Square
      *
      * @return sqNumber - the current square number
      * */
-    public void setSqNumber(String sqNumber)
+    public void setSqNumber(int sqNumber)
     {
         this.sqNumber = sqNumber;
     }

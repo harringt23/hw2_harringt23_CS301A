@@ -247,29 +247,7 @@ public class BoardView extends SurfaceView
         return false;
     }
 
-    /* findSquare
-     *
-     * This method takes in the x and y coordinates that the user pressed on
-     * and returns the index of the square in the array list.
-     *
-     * @param x - the x coordinate where the user pressed
-     * @param y - the y coordinate where the user pressed
-     * @return the index of the square
-     */
-    /*public int findSquare(float x, float y)
-    {
-        // determine the x and y coordinate within the board
-        int xBoard = (int) ((x - boardLeft) / sqSize);
-        int yBoard = (int) ((y - boardTop) / sqSize);
-
-        // determine if the square is out of bounds
-        if (xBoard >= sqPerRow | yBoard >= sqPerRow) return -1;
-
-        // otherwise return the number of the square
-        return xBoard + (yBoard * sqPerRow);
-    }*/
-
-    /* swapSquare
+    /* checkSwap
      *
      * This method verifies that the square is able to be swapped based on the
      * numeric value of the index passed in.
@@ -278,7 +256,7 @@ public class BoardView extends SurfaceView
      * @param y - the y coordinate where the user pressed
      * @return whether the swap was successful
      */
-    public boolean swapSquare(float xTap, float yTap)
+    public boolean checkSwap(float xTap, float yTap)
     {
         // determine the index of the square the user tapped w/ respect to board
         int xBoard = (int) ((xTap - boardLeft) / sqPerRow);
@@ -295,59 +273,69 @@ public class BoardView extends SurfaceView
         if (sqTapped.getSqNumber() == 0) return false;
 
         // verify the blank and tapped square are in the same row
-            if (sqTapped.getSqLeft() == blankSqLeft) {
-                // check if the blank square is above and swap
-                if (checkLeftRight(sqIndex, sqTapped)) return true;
+        // check left
+        if (sqTapped.getSqLeft() <= blankSqLeft
+                && sqTapped.getSqTop() == blankSqTop) {
+            // swap the squares
+            swap(sqIndex, sqTapped);
 
-                // check if the blank square is below and swapped
-            }
+            // return true for successful swap
+            return true;
+        }
+
+        // check top
+        if (sqTapped.getSqLeft() == blankSqLeft
+                && sqTapped.getSqTop() <= blankSqTop) {
+            // swap the squares
+            swap(sqIndex, sqTapped);
+
+            // return true for successful swap
+            return true;
+        }
+
+        // check right
+        if (sqTapped.getSqLeft() >= blankSqLeft
+                && sqTapped.getSqTop() == blankSqTop) {
+            // swap the squares
+            swap(sqIndex, sqTapped);
+
+            // return true for successful swap
+            return true;
+        }
+
+        // check below
+        if (sqTapped.getSqLeft() == blankSqLeft
+                && sqTapped.getSqTop() >= blankSqTop) {
+            // swap the squares
+            swap(sqIndex, sqTapped);
+
+            // return true for successful swap
+            return true;
+        }
+
+        // if unsuccessful return false
         return false;
     }
 
-    /* checkLeft
+    /* swap
      *
-     * This is a helper method determining if the square to be swapped is the
-     * square to the left or right of the blank square given it is known to be
-     * in the same row.
+     * This is a helper method for swapping the squares.
      *
      * @param sqIndex - the index of the square that was tapped
      * @param sqTapped - the square that was tapped
-     * @return whether the square is above the empty square
      */
-    public boolean checkLeftRight(int sqIndex, Square sqTapped)
+    public void swap(int sqIndex, Square sqTapped)
     {
-        // check if the coordinates are to the left of the blank square
-        if (sqTapped.getSqLeft() > blankSqLeft)
-        {
-            // get the new left and top coordinates
-            Square swap = new Square(sqTapped);
+        // get the new left and top coordinates
+        Square swap = new Square(sqTapped);
 
-            // swap the values of tapped index with the blank square
-            board.set(blankSqIndex, sqTapped);
-            board.set(sqIndex, swap);
+        // swap the values of tapped index with the blank square
+        board.set(blankSqIndex, sqTapped);
+        board.set(sqIndex, swap);
 
-            // determine if the new board is correct
-            sqCorrectPosition();
-
-            // return true for successful swap
-            return true;
-        }
-        // check if the coordinates are to the right of the blank square
-        else {
-            // get the new left and top coordinates
-            Square swap = new Square(sqTapped);
-
-            // swap the values of tapped index with the blank square
-            board.set(blankSqIndex, sqTapped);
-            board.set(sqIndex, swap);
-
-            // determine if the new board is correct
-            sqCorrectPosition();
-
-            // return true for successful swap
-            return true;
-        }
-        return false;
+        //TODO: ensure this function resets the correct blank coordinates
+        // determine if the new board is correct
+        sqCorrectPosition();
     }
 
 }

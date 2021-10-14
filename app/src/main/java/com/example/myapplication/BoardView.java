@@ -57,8 +57,7 @@ public class BoardView extends SurfaceView
 
     // track where the empty square is
     private float blankSqLeft, blankSqTop;
-    private int blankSqIndex;
-
+    private int blankSqX, blankSqY, blankSqIndex;
 
 
     /* BoardView
@@ -93,6 +92,8 @@ public class BoardView extends SurfaceView
         // initialize the blank square's values
         blankSqLeft = -1.0F;
         blankSqTop = -1.0F;
+        blankSqX = 0;
+        blankSqY = 0;
         blankSqIndex = -1;
 
         // initialize the board to a random set up
@@ -127,13 +128,16 @@ public class BoardView extends SurfaceView
         // instantiate the list of squares via the randomly shuffled integers
         board = new ArrayList<>();
 
+        // create a new variable to track iterations
+        int sqIndex = 0;
         // iterate through the squares and assign each square a position on the board
         for (int x = 0; x < sqPerRow; x++) 
         {
             for (int y = 0; y < sqPerRow; y++) 
             {
-                // find the current square's index by the col + currNum
-                int sqIndex = y + (x * sqPerRow);
+                // initialize new variables to track the new coordinates
+                float newLeft = boardLeft + sqSize * y;
+                float newTop = boardTop +sqSize * x;
 
                 // add the new square to the board
                 board.add(new Square(boardLeft + sqSize * y,
@@ -142,10 +146,15 @@ public class BoardView extends SurfaceView
                 // determine the current values of the blank square
                 if (sqNumbers.get(sqIndex) == 16)
                 {
-                    blankSqLeft = x;
-                    blankSqTop = y;
+                    blankSqLeft = newLeft;
+                    blankSqTop = newTop;
+                    blankSqX = x;
+                    blankSqY = y;
                     blankSqIndex = sqIndex;
                 }
+
+                // increment the square index
+                sqIndex++;
             }
         }
 
@@ -176,7 +185,6 @@ public class BoardView extends SurfaceView
             currSq = board.get(sqNum);
 
             // determine if the square is in the correct position
-            // TODO - check why never sets to correct position
             if (currSq.getSqNumber() - 1 != sqNum)
             {
                 // if not empty set the current square to red
@@ -287,34 +295,32 @@ public class BoardView extends SurfaceView
     public boolean checkSwap(float xTap, float yTap)
     {
         // determine the index of the square the user tapped w/ respect to board
-        int xBoard = (int) (xTap - boardLeft) / sqSize;
-        int yBoard = (int) (yTap - boardTop) / sqSize;
+        int sqTapX = (int) (yTap - boardLeft) / sqSize;
+        int sqTapY = (int) (xTap - boardTop) / sqSize;
 
         // TESTING
         Log.d("debugSwap", "SWAP CALLED");
-        Log.i("boardX", String.valueOf(xBoard));
-        Log.i("numberX", String.valueOf(xTap));
-        Log.i("boardY", String.valueOf(yBoard));
-        Log.i("numberY", String.valueOf(yTap));
+        Log.i("boardX", String.valueOf(sqTapX));
+        Log.i("boardY", String.valueOf(sqTapY));
 
         // determine if the board coordinates are valid
-        if (xBoard >= sqPerRow || yBoard >= sqPerRow)
+        if (sqTapX >= sqPerRow || sqTapY >= sqPerRow)
         {
             Log.d("outBoundsSwap", "OUT OF BOUNDS CALLED");
             return false;
         }
 
         // otherwise determine the square tapped
-        int sqIndex = (int)(xBoard + ( yBoard * sqPerRow));
+        int sqIndex = (int)(sqTapX + ( sqTapY * sqPerRow));
         Square sqTapped = board.get(sqIndex);
 
         // verify the square is not empty
         if (sqTapped.getSqNumber() == 16) return false;
 
         // verify the blank and tapped square are in the same row
-        // check left
-        if (sqTapped.getSqLeft() <= blankSqLeft
-                && sqTapped.getSqTop() == blankSqTop) {
+        // check right
+        if (sqTapX == blankSqX && sqTapY > blankSqY)
+        {
             // swap the squares
             swap(sqIndex, sqTapped);
 
@@ -323,8 +329,8 @@ public class BoardView extends SurfaceView
         }
 
         // check top
-        if (sqTapped.getSqLeft() == blankSqLeft
-                && sqTapped.getSqTop() <= blankSqTop) {
+        if (sqTapX < blankSqX && sqTapY == blankSqY)
+        {
             // swap the squares
             swap(sqIndex, sqTapped);
 
@@ -332,9 +338,9 @@ public class BoardView extends SurfaceView
             return true;
         }
 
-        // check right
-        if (sqTapped.getSqLeft() >= blankSqLeft
-                && sqTapped.getSqTop() == blankSqTop) {
+        // check left
+        if (sqTapX == blankSqX && sqTapY < blankSqY)
+        {
             // swap the squares
             swap(sqIndex, sqTapped);
 
@@ -343,8 +349,8 @@ public class BoardView extends SurfaceView
         }
 
         // check below
-        if (sqTapped.getSqLeft() == blankSqLeft
-                && sqTapped.getSqTop() >= blankSqTop) {
+        if (sqTapX > blankSqX && sqTapY == blankSqY)
+        {
             // swap the squares
             swap(sqIndex, sqTapped);
 
@@ -366,13 +372,16 @@ public class BoardView extends SurfaceView
     public void swap(int sqIndex, Square sqTapped)
     {
         // get the square to swap
-        Square blank = new Square(board.get(sqIndex));
+        Square swap = new Square(board.get(sqIndex));
 
         // swap the values of tapped index with the blank square
-        //board.get(blankSqIndex).setSqNumber(sqTapped.getSqNumber());
-        //board.get(sqIndex).setSqNumber(16);
-        board.set(blankSqIndex, sqTapped);
-        board.set(sqIndex, blank);
+        board.get(blankSqIndex).setSqNumber(sqTapped.getSqNumber());
+        board.get(sqIndex).setSqNumber(16);
+
+        // reset the blank square values
+        blankSqLeft = swap.getSqLeft();
+        blankSqTop = swap.getSqTop();
+        blankSqIndex = sqIndex;
 
         //TODO: ensure this function resets the correct blank coordinates
         // determine if the new board is correct

@@ -43,9 +43,6 @@ public class BoardView extends SurfaceView
     // initialize the background color of the board
     private final Paint backgroundColor = new Paint();
 
-    // initialize the size of the board based on the number of squares per row
-    private final int sqSize = boardWidth / sqPerRow;
-
     // set a new paint variable for the correct and incorrect position
     private final Paint correctPosition = new Paint();
     private final Paint incorrectPosition = new Paint();
@@ -127,6 +124,8 @@ public class BoardView extends SurfaceView
                 int sqIndex = y + currNum;
 
                 // add the new square to the board
+                // initialize the size of the board based on the number of squares per row
+                int sqSize = boardWidth / sqPerRow;
                 board.add(new Square(boardLeft + sqSize * y,
                         boardTop + sqSize * x, sqNumbers.get(currNum)));
 
@@ -227,9 +226,6 @@ public class BoardView extends SurfaceView
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent)
     {
-        // determine the square to be moved
-        int sqMove;
-
         // verify the user pressed the screen
         if (motionEvent.getActionMasked() == MotionEvent.ACTION_DOWN)
         {
@@ -238,10 +234,17 @@ public class BoardView extends SurfaceView
             float x = motionEvent.getX();
             float y = motionEvent.getY();
 
-            // check
+            // check if a swap is possible
+            if (checkSwap(x, y))
+            {
+                // invalidate the current view
+                invalidate();
+
+                // return true
+                return true;
+            }
 
         }
-
 
         // if invalid touch or unable to swap keep view the same
         return false;

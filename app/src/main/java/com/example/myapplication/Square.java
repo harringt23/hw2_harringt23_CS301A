@@ -19,7 +19,7 @@ public class Square
     // track where the square is positioned
     private float sqLeft, sqTop;
     // track what number is on the tile
-    private int sqNumber;
+    private String sqNumber;
     // create paint variables for the text and square color
     private Paint sqColor;
     private final Paint textColor;
@@ -27,7 +27,7 @@ public class Square
     /* Square Constructor
      * Initializes the instance/member variables for the square object.
      */
-    public Square(float left, float top, int number)
+    public Square(float left, float top, String number)
     {
         // set the square's coordinates to the parameters passed in
         sqLeft = left;
@@ -77,42 +77,11 @@ public class Square
         float sqSize = 200;
         canvas.drawRect(sqLeft, sqTop, sqLeft + sqSize, sqTop + sqSize, sqColor);
 
-        // initialize the text number as a string
-        String number = Integer.toString(sqNumber);
-
         // set the text size to
         textColor.setTextSize(50);
 
         // draw the text onto the square
-        canvas.drawText(number, sqLeft + sqSize / 2, sqTop + sqSize / 2, textColor);
-    }
-
-     /* setTextSize
-      *
-      * This is a helper function to set the text size based on the
-      * size of the square.
-      *
-      * SOURCE:
-      * https://stackoverflow.com/questions/12166476/android-canvas-drawtext-set-font-size-from-width/12166539
-      *
-      */
-    public int determineTextSize(float sqWidth) {
-        // initialize a variable to set the text size
-        int size = 0;
-
-        // initialize a variable to store 15 since two-digits will be the widest
-        String text = "15";
-
-        // initialize a paint variable to determine size
-        Paint paint = new Paint();
-
-        // increase the size while the text is less than the width passed in
-        do {
-            paint.setTextSize(++ size);
-        } while(paint.measureText(text) < sqWidth);
-
-        // return the maximum size
-        return size;
+        canvas.drawText(sqNumber, sqLeft + sqSize / 2, sqTop + sqSize / 2, textColor);
     }
 
     /* getSqLeft
@@ -137,12 +106,20 @@ public class Square
      *
      * @return sqNumber - the current square number
      * */
-    public int getSqNumber()
+    public String getSqNumber()
     {
         return sqNumber;
     }
-
-
+    /* setSqNumber
+     *
+     * Returns the current square number.
+     *
+     * @return sqNumber - the current square number
+     * */
+    public void setSqNumber(String sqNumber)
+    {
+        this.sqNumber = sqNumber;
+    }
     /* setSqColor
      *
      * Sets the current square number.

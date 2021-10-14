@@ -27,12 +27,6 @@ public class BoardView extends SurfaceView
         implements View.OnClickListener, View.OnTouchListener
 {
     /* Constant Variables */
-    // initialize the total number of squares in the game
-    private final int sqTotal = 16;
-
-    // initialize the number of squares per row
-    private final int sqPerRow = 4;
-
     // initialize the width, top, and left of the board
     private final int boardWidth = 1000;
     private final float boardTop = 200;
@@ -46,6 +40,10 @@ public class BoardView extends SurfaceView
     private final Paint incorrectPosition = new Paint();
 
     /* Instance/Member Variables */
+    // initialize the size of the rows and board
+    private int sqPerRow;
+    private final int sqTotal = sqPerRow * sqPerRow;
+
     // initialize a new array of squares in the game (16 squares on the board)
     private ArrayList<Square> board;
 
@@ -80,6 +78,9 @@ public class BoardView extends SurfaceView
         // initialize paint for the background color of the board
         backgroundColor.setColor(Color.BLACK);
 
+        // initialize the size of the rows
+        sqPerRow = 4;
+
         // initialize the board to a random set up
         initBoard();
 
@@ -97,15 +98,19 @@ public class BoardView extends SurfaceView
     public void initBoard()
     {
         // initialize the list of numbers that a square can hold as a value
-        // 0 represents empty, 15 is the max
-        ArrayList<Integer> sqNumbers = new ArrayList<>(sqTotal);
-        for (int sqNum = 0; sqNum < sqTotal; sqNum++)
+        ArrayList<String> sqNumbers = new ArrayList<>(sqTotal);
+
+        // initialize the first index as an empty string
+        for (int sqNum = 1; sqNum < sqTotal; sqNum++)
         {
-            sqNumbers.add(sqNum);
+            sqNumbers.add(String.valueOf(sqNum));
         }
 
         // shuffle the board to create random numbering
         Collections.shuffle(sqNumbers);
+
+        // initialize the size of the board based on the number of squares per row
+        int sqSize = boardWidth / sqPerRow;
 
         // instantiate the list of squares via the randomly shuffled integers
         board = new ArrayList<>(sqTotal);
@@ -122,14 +127,12 @@ public class BoardView extends SurfaceView
                 int sqIndex = y + currNum;
 
                 // add the new square to the board
-                // initialize the size of the board based on the number of squares per row
-                int sqSize = boardWidth / sqPerRow;
                 board.add(new Square(boardLeft + sqSize * y,
                         boardTop + sqSize * x, sqNumbers.get(sqIndex)));
 
-
                 // determine the current value of the blank square
-                if (sqNumbers.get(currNum) == 0) {
+                if (sqNumbers.get(currNum).equals(""))
+                {
                     blankSqTop = y;
                     blankSqLeft = x;
                     blankSqIndex = currNum;
@@ -148,7 +151,7 @@ public class BoardView extends SurfaceView
      * be set/remain red depending on if was initially in the incorrect spot or if it
      * moved to the wrong spot.
      *
-     *  */
+     */
     public void sqCorrectPosition()
     {
         // reset solved to true
@@ -158,19 +161,31 @@ public class BoardView extends SurfaceView
         Square currSq;
 
         // determine if the current index is the current value
-        for (int x = 1; x < sqTotal; x++)
+        for (int sqNum = 0; sqNum < sqTotal - 1; sqNum++)
         {
-            currSq = board.get(x);
+            // get the current square
+            currSq = board.get(sqNum);
 
-            if (currSq.getSqNumber() != x) 
+            // determine if the square is in the correct position
+            if (!currSq.getSqNumber().equals(String.valueOf(sqNum + 1)))
             {
-                // set the current square to red
+                // if not empty set the current square to red
                 currSq.setSqColor(incorrectPosition);
                 // set solved to false
                 solved = false;
             }
             else currSq.setSqColor(correctPosition);
         }
+        // verify the last position is empty
+        if (!board.get(sqTotal).getSqNumber().equals(""))
+        {
+            // if not empty set the square to red
+            board.get(sqTotal).setSqColor(incorrectPosition);
+
+            // set solved to false
+            solved = false;
+        }
+
     }
 
     /* onDraw
@@ -228,7 +243,6 @@ public class BoardView extends SurfaceView
         if (motionEvent.getActionMasked() == MotionEvent.ACTION_DOWN)
         {
             // determine the number of the square pressed down
-            //sqMove = findSquare(motionEvent.getX(), motionEvent.getY());
             float x = motionEvent.getX();
             float y = motionEvent.getY();
 
@@ -271,7 +285,7 @@ public class BoardView extends SurfaceView
         Square sqTapped = board.get(sqIndex);
 
         // verify the square is not empty
-        if (sqTapped.getSqNumber() == 0) return false;
+        if (sqTapped.getSqNumber().equals("")) return false;
 
         // verify the blank and tapped square are in the same row
         // check left
@@ -327,12 +341,12 @@ public class BoardView extends SurfaceView
      */
     public void swap(int sqIndex, Square sqTapped)
     {
-        // get the new left and top coordinates
-        Square swap = new Square(sqTapped);
+        // get the square to swap
+        Square swap = new Square(board.get(blankSqIndex));
 
         // swap the values of tapped index with the blank square
-        board.set(blankSqIndex, sqTapped);
-        board.set(sqIndex, swap);
+        board.get(blankSqIndex).setSqNumber(board.get(sqIndex).getSqNumber());
+        board.get(sqIndex).setSqNumber("");
 
         //TODO: ensure this function resets the correct blank coordinates
         // determine if the new board is correct

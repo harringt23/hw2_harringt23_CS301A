@@ -19,8 +19,6 @@ public class Square
     // track where the square is positioned
     private float sqLeft;
     private float sqTop;
-    private int sqRow;
-    private int sqCol;
 
     // initialize square size
     private int sqSize;
@@ -40,10 +38,6 @@ public class Square
         // set the square's coordinates to the parameters passed in
         sqLeft = left;
         sqTop = top;
-
-        // set the square's row and column
-        sqRow = row;
-        sqCol = col;
 
         // set the square size
         sqSize = 400;
@@ -74,8 +68,6 @@ public class Square
         // set the square's parameters to the initial square passed in
         this.sqLeft = initSq.sqLeft;
         this.sqTop = initSq.sqTop;
-        this.sqRow = initSq.sqRow;
-        this.sqCol = initSq.sqCol;
         this.sqSize = initSq.sqSize;
         this.sqNumber = initSq.sqNumber;
         this.sqColor = new Paint(initSq.sqColor);
@@ -105,22 +97,6 @@ public class Square
             canvas.drawText("", sqLeft + sqSize / 2, sqTop + sqSize / 2, textColor);
         }
     }
-
-    /* getSqRow
-     *
-     * Returns the current square row coordinate.
-     *
-     * @return sqRow - the current square row
-     * */
-    public int getSqRow() { return sqRow; }
-
-    /* getSqCol
-     *
-     * Returns the current square column coordinate.
-     *
-     * @return sqCol - the current square column
-     * */
-    public int getSqCol() { return sqCol; }
 
     /* getSqNumber
      *

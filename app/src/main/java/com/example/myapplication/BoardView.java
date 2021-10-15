@@ -287,8 +287,8 @@ public class BoardView extends SurfaceView
     public boolean checkSwap(float xTap, float yTap)
     {
         // determine the index of the square the user tapped w/ respect to board
-        int sqTapX = (int) (yTap - boardTop) / sqSize;
-        int sqTapY = (int) (xTap - boardLeft) / sqSize;
+        int sqTapX = (int) (xTap - boardTop) / sqSize;
+        int sqTapY = (int) (yTap - boardLeft) / sqSize;
 
         // TESTING
         Log.d("debugSwap", "SWAP CALLED");
@@ -354,6 +354,26 @@ public class BoardView extends SurfaceView
         return false;
     }
 
+    /* surroundsBlank
+     *
+     * This is a helper method for swapping squares to ensure the location is valid.
+     *
+     * @param sqTapRow - the row of the square that was tapped
+     * @param sqTapCol - the column of the square that was tapped
+     * @returns whether the location surrounds the blank square
+     * -------------
+     * | 1 | 3 | 9 |
+     * | 6 | 2 | 4 |
+     * | 8 |   | 7 |
+     * -------------
+     */
+    public boolean surroundsBlank(int sqTapRow, int sqTapCol)
+    {
+        // determine
+
+        return false;
+    }
+
     /* swap
      *
      * This is a helper method for swapping the squares.
@@ -366,19 +386,21 @@ public class BoardView extends SurfaceView
     public void swap(int sqIndex, Square sqTapped, int sqTapRow, int sqTapCol)
     {
         // initialize variables to store the squares to swap
-        Square blankSq = new Square(board.get(blankSqIndex));
+        //Square blankSq = board.get(blankSqIndex);
+
+        // get the square number of the one to be swapped
+        int swapSqNum = board.get(sqIndex).getSqNumber();
+
+        // swap the values of tapped square with the blank square
+        sqTapped.setSqNumber(16);
+        board.get(blankSqIndex).setSqNumber(swapSqNum);
 
         // reset the blank square values
         blankSqIndex = sqIndex;
-        blankSqRow = sqTapped.getSqRow();
-        blankSqCol = sqTapped.getSqCol();
-
-        // swap the values of tapped square with the blank square
-        board.set(blankSqIndex, sqTapped);
-        board.set(sqIndex, blankSq);
+        blankSqRow = sqTapRow;
+        blankSqCol = sqTapCol;
 
         // determine if the new board is correct
         sqCorrectPosition();
     }
-
 }

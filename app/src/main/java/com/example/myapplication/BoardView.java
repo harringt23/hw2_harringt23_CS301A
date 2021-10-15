@@ -81,7 +81,7 @@ public class BoardView extends SurfaceView
 
         // initialize the size of the rows and total squares
         sqPerRow = 4;
-        sqTotal = sqPerRow * sqPerRow;
+        sqTotal = sqPerRow * sqPerRow - 1;
 
         // initialize the square size
         sqSize = boardWidth / sqPerRow;
@@ -303,7 +303,7 @@ public class BoardView extends SurfaceView
         }
 
         // otherwise determine the square tapped
-        int sqIndex = (int)(sqTapX + ( sqTapY * sqPerRow));
+        int sqIndex = sqTapX + ( sqTapY * sqPerRow);
         Square sqTapped = board.get(sqIndex);
 
         // verify the square is not empty

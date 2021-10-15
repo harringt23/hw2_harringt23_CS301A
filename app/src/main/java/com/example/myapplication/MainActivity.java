@@ -13,10 +13,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // initialize a new board view
-        BoardView boardView = (BoardView) findViewById(R.id.boardView);
+        BoardView boardView = findViewById(R.id.boardView);
 
         // set up the on click listener for the reset button
-        Button reset = (Button) findViewById(R.id.reset_button);
+        Button reset = findViewById(R.id.reset_button);
         reset.setOnClickListener(boardView);
 
         // set up the touch listener for the board

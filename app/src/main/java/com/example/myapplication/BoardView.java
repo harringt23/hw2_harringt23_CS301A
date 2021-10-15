@@ -135,7 +135,7 @@ public class BoardView extends SurfaceView
                 float newTop = boardTop +sqSize * row;
 
                 // add the new square to the board
-                board.add(new Square(newLeft, newTop, sqNumbers.get(sqIndex)));
+                board.add(new Square(newLeft, newTop, row, col, sqNumbers.get(sqIndex)));
 
                 // determine the current values of the blank square
                 if (sqNumbers.get(sqIndex) == 16)
@@ -314,7 +314,7 @@ public class BoardView extends SurfaceView
         if (sqTapX == blankSqRow && sqTapY > blankSqCol)
         {
             // swap the squares
-            swap(sqIndex, sqTapped);
+            swap(sqIndex, sqTapped, sqTapX, sqTapY);
 
             // return true for successful swap
             return true;
@@ -324,7 +324,7 @@ public class BoardView extends SurfaceView
         if (sqTapX < blankSqRow && sqTapY == blankSqCol)
         {
             // swap the squares
-            swap(sqIndex, sqTapped);
+            swap(sqIndex, sqTapped, sqTapX, sqTapY);
 
             // return true for successful swap
             return true;
@@ -334,7 +334,7 @@ public class BoardView extends SurfaceView
         if (sqTapX == blankSqRow && sqTapY < blankSqCol)
         {
             // swap the squares
-            swap(sqIndex, sqTapped);
+            swap(sqIndex, sqTapped, sqTapX, sqTapY);
 
             // return true for successful swap
             return true;
@@ -344,7 +344,7 @@ public class BoardView extends SurfaceView
         if (sqTapX > blankSqRow && sqTapY == blankSqCol)
         {
             // swap the squares
-            swap(sqIndex, sqTapped);
+            swap(sqIndex, sqTapped, sqTapX, sqTapY);
 
             // return true for successful swap
             return true;
@@ -360,20 +360,23 @@ public class BoardView extends SurfaceView
      *
      * @param sqIndex - the index of the square that was tapped
      * @param sqTapped - the square that was tapped
+     * @param sqTapRow - the row position of the square tapped
+     * @param sqTapCol - the column position of the square tapped
      */
-    public void swap(int sqIndex, Square sqTapped)
+    public void swap(int sqIndex, Square sqTapped, int sqTapRow, int sqTapCol)
     {
-        // get the square to swap
-        //Square swap = new Square(board.get(sqIndex));
-
-        // swap the values of tapped index with the blank square
-        board.get(blankSqIndex).setSqNumber(sqTapped.getSqNumber());
-        board.get(sqIndex).setSqNumber(16);
+        // initialize variables to store the squares to swap
+        Square blankSq = new Square(board.get(blankSqIndex));
 
         // reset the blank square values
         blankSqIndex = sqIndex;
+        blankSqRow = sqTapped.getSqRow();
+        blankSqCol = sqTapped.getSqCol();
 
-        //TODO: ensure this function resets the correct blank coordinates
+        // swap the values of tapped square with the blank square
+        board.set(blankSqIndex, sqTapped);
+        board.set(sqIndex, blankSq);
+
         // determine if the new board is correct
         sqCorrectPosition();
     }

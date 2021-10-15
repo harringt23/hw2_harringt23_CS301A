@@ -19,6 +19,8 @@ public class Square
     // track where the square is positioned
     private float sqLeft;
     private float sqTop;
+    private int sqRow;
+    private int sqCol;
 
     // initialize square size
     private int sqSize;
@@ -33,11 +35,15 @@ public class Square
     /* Square Constructor
      * Initializes the instance/member variables for the square object.
      */
-    public Square(float left, float top, int number)
+    public Square(float left, float top, int row, int col, int number)
     {
         // set the square's coordinates to the parameters passed in
         sqLeft = left;
         sqTop = top;
+
+        // set the square's row and column
+        sqRow = row;
+        sqCol = col;
 
         // set the square size
         sqSize = 400;
@@ -68,6 +74,8 @@ public class Square
         // set the square's parameters to the initial square passed in
         this.sqLeft = initSq.sqLeft;
         this.sqTop = initSq.sqTop;
+        this.sqRow = initSq.sqRow;
+        this.sqCol = initSq.sqCol;
         this.sqSize = initSq.sqSize;
         this.sqNumber = initSq.sqNumber;
         this.sqColor = new Paint(initSq.sqColor);
@@ -98,21 +106,21 @@ public class Square
         }
     }
 
-    /* getSqLeft
+    /* getSqRow
      *
-     * Returns the current square left coordinate.
+     * Returns the current square row coordinate.
      *
-     * @return sqNumber - the current square number
+     * @return sqRow - the current square row
      * */
-    public float getSqLeft() { return sqLeft; }
+    public int getSqRow() { return sqRow; }
 
-    /* getSqTop
+    /* getSqCol
      *
-     * Returns the current square top coordinate.
+     * Returns the current square column coordinate.
      *
-     * @return sqNumber - the current square number
+     * @return sqCol - the current square column
      * */
-    public float getSqTop() { return sqTop; }
+    public int getSqCol() { return sqCol; }
 
     /* getSqNumber
      *
@@ -124,21 +132,23 @@ public class Square
     {
         return sqNumber;
     }
+
     /* setSqNumber
      *
-     * Returns the current square number.
+     * Sets the current square number.
      *
-     * @return sqNumber - the current square number
+     * @param sqNumber - the number to set the square
      * */
     public void setSqNumber(int sqNumber)
     {
         this.sqNumber = sqNumber;
     }
+
     /* setSqColor
      *
-     * Sets the current square number.
+     * Sets the current square color.
      *
-     * @param newNumber - the current square number
+     * @param newNumber - the color to change the square to
      * */
     public void setSqColor(Paint newColor)
     {

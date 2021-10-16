@@ -77,7 +77,7 @@ public class BoardView extends SurfaceView
         incorrectPosition.setColor(Color.RED);
 
         // initialize paint for the background color of the board
-        backgroundColor.setColor(Color.BLACK);
+        backgroundColor.setColor(Color.WHITE);
 
         // initialize the size of the rows and total squares
         sqPerRow = 4;
@@ -117,8 +117,8 @@ public class BoardView extends SurfaceView
         }
 
 
-        // shuffle the board to create random numbering
-        Collections.shuffle(sqNumbers);
+        // TODO - ADD BACK IN shuffle the board to create random numbering
+       // Collections.shuffle(sqNumbers);
 
         // instantiate the list of squares via the randomly shuffled integers
         board = new ArrayList<>();
@@ -149,6 +149,10 @@ public class BoardView extends SurfaceView
                 sqIndex++;
             }
         }
+
+        /// TODO TESTING
+        Square swap = board.get(14);
+        swap(14, swap, 3, 2);
 
         // determine if any squares are in the correct position
         sqCorrectPosition();
@@ -210,33 +214,13 @@ public class BoardView extends SurfaceView
     @Override
     public void onDraw(Canvas canvas)
     {
-        // draw the background of the board onto the surface view
-        if(!solved)
-        {
-            // set the background color to black for not solved
-            backgroundColor.setColor(Color.BLACK);
+        // if solved set background to green
+        if(!solved) backgroundColor.setColor(Color.WHITE);
+        else backgroundColor.setColor(Color.GREEN);
 
-            // draw the background
-            canvas.drawRect(boardLeft, boardTop, boardLeft +boardWidth,
-                boardTop + boardWidth, backgroundColor);
-        }
-        else
-        {
-            // set the background color to white for solved
-            backgroundColor.setColor(Color.WHITE);
-
-            // draw the background
-            canvas.drawRect(boardLeft, boardTop, boardLeft +boardWidth,
-                boardTop + boardWidth, backgroundColor);
-
-            // print a message saying congratulations, you won!
-            Paint winText = new Paint();
-            winText.setColor(Color.BLACK);
-            canvas.drawText("Congratulations! You won!", 2000, 2000, winText);
-        }
-
-
-
+        // draw the backgroundof the board onto the surface view
+        canvas.drawRect(boardLeft, boardTop, boardLeft +boardWidth,
+            boardTop + boardWidth, backgroundColor);
 
         // draw the squares onto the canvas
         for(Square sq: board) sq.draw(canvas);

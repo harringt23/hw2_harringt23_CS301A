@@ -51,7 +51,7 @@ public class BoardView extends SurfaceView
     private ArrayList<Square> board;
 
     // create a boolean to track if the game is over
-    //private boolean solved;
+    private boolean solved;
 
     // track where the empty square is
     private int blankSqRow, blankSqCol, blankSqIndex;
@@ -95,7 +95,7 @@ public class BoardView extends SurfaceView
         initBoard();
 
         // initialize solved to false
-        //solved = false;
+        solved = false;
 
     }
 
@@ -165,7 +165,7 @@ public class BoardView extends SurfaceView
     public void sqCorrectPosition()
     {
         // reset solved to true
-        //solved = true;
+        solved = true;
 
         // initialize a variable to track the current square number
         Square currSq;
@@ -182,7 +182,7 @@ public class BoardView extends SurfaceView
                 // if not empty set the current square to red
                 currSq.setSqColor(incorrectPosition);
                 // set solved to false
-                //solved = false;
+                solved = false;
             }
             else currSq.setSqColor(correctPosition);
         }
@@ -193,7 +193,7 @@ public class BoardView extends SurfaceView
             board.get(sqTotal).setSqColor(incorrectPosition);
 
             // set solved to false
-            //solved = false;
+            solved = false;
         }
         // otherwise set it so the correct position color
         else board.get(sqTotal).setSqColor(correctPosition);
@@ -211,11 +211,36 @@ public class BoardView extends SurfaceView
     public void onDraw(Canvas canvas)
     {
         // draw the background of the board onto the surface view
-        canvas.drawRect(boardLeft, boardTop, boardLeft +boardWidth,
+        if(!solved)
+        {
+            // set the background color to black for not solved
+            backgroundColor.setColor(Color.BLACK);
+
+            // draw the background
+            canvas.drawRect(boardLeft, boardTop, boardLeft +boardWidth,
                 boardTop + boardWidth, backgroundColor);
+        }
+        else
+        {
+            // set the background color to white for solved
+            backgroundColor.setColor(Color.WHITE);
+
+            // draw the background
+            canvas.drawRect(boardLeft, boardTop, boardLeft +boardWidth,
+                boardTop + boardWidth, backgroundColor);
+
+            // print a message saying congratulations, you won!
+            Paint winText = new Paint();
+            winText.setColor(Color.BLACK);
+            canvas.drawText("Congratulations! You won!", 2000, 2000, winText);
+        }
+
+
+
 
         // draw the squares onto the canvas
         for(Square sq: board) sq.draw(canvas);
+
     }
 
     /* onClick
@@ -266,9 +291,6 @@ public class BoardView extends SurfaceView
                 // return true
                 return true;
             }
-            // otherwise return false
-            else return false;
-
         }
 
         // if invalid touch or unable to swap keep view the same
@@ -290,17 +312,8 @@ public class BoardView extends SurfaceView
         int sqTapX = (int) (xTap - boardTop) / sqSize;
         int sqTapY = (int) (yTap - boardLeft) / sqSize;
 
-        // TESTING
-        Log.d("debugSwap", "SWAP CALLED");
-        Log.i("boardX", String.valueOf(sqTapX));
-        Log.i("boardY", String.valueOf(sqTapY));
-
         // determine if the board coordinates are valid
-        if (sqTapX >= sqPerRow || sqTapY >= sqPerRow)
-        {
-            Log.d("outBoundsSwap", "OUT OF BOUNDS CALLED");
-            return false;
-        }
+        if (sqTapX >= sqPerRow || sqTapY >= sqPerRow) return false;
 
         // otherwise determine the square tapped
         int sqIndex = sqTapX + ( sqTapY * sqPerRow);
@@ -309,44 +322,10 @@ public class BoardView extends SurfaceView
         // verify the square is not empty
         if (sqTapped.getSqNumber() == 16) return false;
 
-        // verify the blank and tapped square are in the same row
-        // check right
-        if (sqTapX == blankSqRow && sqTapY > blankSqCol)
-        {
-            // swap the squares
+        // verify the square is next to the blank
+        if (surroundsBlank(sqTapX, sqTapY)) {
+            // swap the squares and return true
             swap(sqIndex, sqTapped, sqTapX, sqTapY);
-
-            // return true for successful swap
-            return true;
-        }
-
-        // check top
-        if (sqTapX < blankSqRow && sqTapY == blankSqCol)
-        {
-            // swap the squares
-            swap(sqIndex, sqTapped, sqTapX, sqTapY);
-
-            // return true for successful swap
-            return true;
-        }
-
-        // check left
-        if (sqTapX == blankSqRow && sqTapY < blankSqCol)
-        {
-            // swap the squares
-            swap(sqIndex, sqTapped, sqTapX, sqTapY);
-
-            // return true for successful swap
-            return true;
-        }
-
-        // check below
-        if (sqTapX > blankSqRow && sqTapY == blankSqCol)
-        {
-            // swap the squares
-            swap(sqIndex, sqTapped, sqTapX, sqTapY);
-
-            // return true for successful swap
             return true;
         }
 
@@ -369,8 +348,27 @@ public class BoardView extends SurfaceView
      */
     public boolean surroundsBlank(int sqTapRow, int sqTapCol)
     {
-        // determine
+        // determine if the square tapped was left/right to the blank square
+        if (sqTapRow == blankSqRow)
+        {
+            // if left to blank return true;
+            if (blankSqCol - sqTapCol == 1) return true;
 
+            // if right to blank return true;
+            if (sqTapCol - blankSqCol == 1) return true;
+        }
+
+        // determine if the square tapped was above/below to the blank square
+        if (sqTapCol == blankSqCol)
+        {
+            // if above blank return true;
+            if (blankSqRow - sqTapRow == 1) return true;
+
+            // if below blank return true;
+            if (sqTapRow - blankSqRow == 1) return true;
+        }
+
+        // otherwise return false
         return false;
     }
 

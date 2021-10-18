@@ -36,7 +36,7 @@ public class BoardView extends SurfaceView
     private final float boardLeft = 25;
 
     // initialize the square size
-    private final int sqSize;
+    private int sqSize;
 
     // initialize the background color of the board
     private final Paint backgroundColor = new Paint();
@@ -112,6 +112,9 @@ public class BoardView extends SurfaceView
      */
     public void initBoard()
     {
+        // reset the size of the squares if necessary
+        sqSize = boardWidth / sqPerRow;
+
         // initialize the list of numbers that a square can hold as a value
         ArrayList<Integer> sqNumbers = new ArrayList<>();
 
@@ -442,6 +445,7 @@ public class BoardView extends SurfaceView
         // if invalid touch or unable to swap keep view the same
         return false;
     }
+
     /* onProgressChanged()
      *
      * This method tracks changes of the SeekBar and updates the board based on current progress
@@ -459,6 +463,9 @@ public class BoardView extends SurfaceView
 
         // update the new total number of squares
         sqTotal = sqPerRow * sqPerRow - 1;
+
+        // rebuild the board
+        initBoard();
 
         // invalidate the current view
         invalidate();

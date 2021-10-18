@@ -2126,6 +2126,7 @@ int id north 0x7f08012b
 int id notification_background 0x7f08012c
 int id notification_main_column 0x7f08012d
 int id notification_main_column_container 0x7f08012e
+int id numSqBoard 0x7f0801d5
 int id off 0x7f08012f
 int id on 0x7f080130
 int id outline 0x7f080131

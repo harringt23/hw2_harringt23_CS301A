@@ -111,11 +111,7 @@ public class BoardView extends SurfaceView
         ArrayList<Integer> sqNumbers = new ArrayList<>();
 
         // add 1 through 16 where 16 will be the empty
-        for (int sqNum = 1; sqNum <= sqTotal + 1; sqNum++)
-        {
-            sqNumbers.add(sqNum);
-        }
-
+        for (int sqNum = 1; sqNum <= sqTotal + 1; sqNum++) sqNumbers.add(sqNum);
 
         // shuffle the board to create random numbering
        Collections.shuffle(sqNumbers);
@@ -149,6 +145,8 @@ public class BoardView extends SurfaceView
                 sqIndex++;
             }
         }
+        // if unable to solve, call the initialization again
+        if (!isSolvable()) initBoard();
 
         // determine if any squares are in the correct position
         sqCorrectPosition();
@@ -388,9 +386,56 @@ public class BoardView extends SurfaceView
      *
      * @return whether the board can be solved
      */
-    public boolean isSolvable(){
-        // if the number of 
-        return false;
+    public boolean isSolvable()
+    {
+        // determine if inversion and board is odd
+        boolean inversionOdd, boardSizeOdd;
+        inversionOdd = getInversionCount() % 2 != 0;
+        boardSizeOdd = board.size() % 2 != 0;
+
+        // if the board size is odd and inversions are even, return true
+        if (boardSizeOdd) return !(inversionOdd);
+        // if board size is even, determine if blank square
+        // is in an odd row
+        else
+        {
+            // determine if the blank square is in an odd row
+            boolean blankRowOdd = blankSqRow % 2 != 0;
+
+            // if odd row and even inversions return true
+            if (blankRowOdd) return !(inversionOdd);
+
+            // other wise return if the inversion count is odd
+            else return inversionOdd;
+        }
+    }
+
+    /* getInversionCount
+     *
+     * This is a helper method to count the number of inversions.
+     *
+     * @return count - the inversion count
+     */
+    int getInversionCount()
+    {
+        // initialize the inversion count
+        int count = 0;
+
+        // iterate through the array
+        for (int x = 0; x <= sqTotal; x++)
+        {
+            for (int y = x + 1; y < sqTotal; y++)
+            {
+                // ensure the blank square is not viewed
+                if (x == blankSqIndex || y == blankSqIndex) continue;
+
+                // count the pairs such that x appears before y but x > y
+                if (board.get(x).getSqNumber() > board.get(y).getSqNumber()) count++;
+            }
+        }
+
+        // return the inversion count
+            return count;
     }
 }
 

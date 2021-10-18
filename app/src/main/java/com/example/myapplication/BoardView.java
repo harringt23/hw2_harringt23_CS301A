@@ -381,4 +381,17 @@ public class BoardView extends SurfaceView
         // determine if the new board is correct
         sqCorrectPosition();
     }
+
+    /* isSolvable
+     * This method determines whether a board can be solved given
+     * the initial shuffle.
+     *
+     * @return whether the board can be solved
+     */
+    public boolean isSolvable(){
+        // if the number of 
+        return false;
+    }
 }
+
+

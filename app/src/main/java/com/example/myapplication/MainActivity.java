@@ -23,7 +23,7 @@
  * 2. Write your program so that the size of the puzzle can be changed.
    For example, a user could specify a 7x7 puzzle (with 48 numbered squares) or a
    9x9 puzzle (with 80 numbered squares). It is up to you to decide how the user
-   should specify the puzzle size. I chose a minimum of 3 and maximum of 10.
+   should specify the puzzle size. I chose a minimum of 2 and maximum of 7.
  *
  * @author Brynn Harrington
  * @version October 17, 2021

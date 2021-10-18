@@ -457,18 +457,17 @@ public class BoardView extends SurfaceView
     @Override
     public void onProgressChanged(SeekBar seekBar, int size, boolean b)
     {
-        // if the size is larger than or equal to 3, reset the numbers of squares per row
-        // to the size specified and create a new board and the total number of squares
-        sqPerRow = Math.max(size, 3);
+        // ensure the squares per row are at least 2
+        sqPerRow = Math.max(size, 2);
 
         // update the new total number of squares
         sqTotal = sqPerRow * sqPerRow - 1;
 
-        // rebuild the board
-        initBoard();
-
         // invalidate the current view
         invalidate();
+
+        // rebuild the board
+        initBoard();
     }
 
     @Override

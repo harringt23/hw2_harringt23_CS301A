@@ -136,10 +136,10 @@ public class BoardView extends SurfaceView
                 float newTop = boardTop +sqSize * row;
 
                 // add the new square to the board
-                board.add(new Square(newLeft, newTop, row, col, sqNumbers.get(sqIndex)));
+                board.add(new Square(newLeft, newTop, row, col, sqNumbers.get(sqIndex), sqTotal));
 
                 // determine the current values of the blank square
-                if (sqNumbers.get(sqIndex) == 16)
+                if (sqNumbers.get(sqIndex) == sqTotal)
                 {
                     blankSqRow = row;
                     blankSqCol = col;
@@ -155,6 +155,17 @@ public class BoardView extends SurfaceView
 
         // determine if any squares are in the correct position
         sqCorrectPosition();
+    }
+
+    /* getNumSquares
+     *
+     * This function returns the number of the squares on the board
+     *
+     * @return the number of squares on the board
+     * */
+    public int getNumSquares()
+    {
+        return sqTotal + 1;
     }
 
     /* sqCorrectPosition
@@ -201,111 +212,6 @@ public class BoardView extends SurfaceView
         // otherwise set it so the correct position color
         else board.get(sqTotal).setSqColor(correctPosition);
     }
-
-    /* onDraw
-     *
-     * This method overrides the onDraw method to draw the squares accurately
-     * onto the current instance of the canvas. The canvas will be displayed
-     * onto the surface view object that the tablet has access to.
-     *
-     * @param canvas - the canvas that will be drawn onto the surface view
-     */
-    @Override
-    public void onDraw(Canvas canvas)
-    {
-        // if solved set background to green
-        if(!solved) backgroundColor.setColor(Color.WHITE);
-        else backgroundColor.setColor(Color.GREEN);
-
-        // draw the background of the board onto the surface view
-        canvas.drawRect(boardLeft, boardTop, boardLeft +boardWidth,
-            boardTop + boardWidth, backgroundColor);
-
-        // draw the squares onto the canvas
-        for(Square sq: board) sq.draw(canvas);
-
-    }
-
-    /* onClick
-     *
-     * This method overrides the onClick method to read when the user has
-     * clicked on the reset button. By doing this, the board will be re-initialized
-     * and the current view will be invalidated so the new canvas may be drawn.
-     *
-     * @param view - the view that will be overwritten
-     */
-    @Override
-    public void onClick(View view)
-    {
-        // generate the new board
-        initBoard();
-
-        // invalidate the current view
-        invalidate();
-    }
-
-    /* onTouch
-     *
-     * This method overrides the onTouch method to correctly calculate where the
-     * user is attempting to move the square. Since there is only one position
-     * the user can possible move the square to (as there is only one empty square)
-     * the coordinates the user presses on can be used to determine if it is next
-     * to an empty, and if it is, swap the squares.
-     *
-     * @param view - the current view where the user's touch will be found
-     * @param motionEvent - the motion event of the user
-     */
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent)
-    {
-        // verify the user pressed the screen
-        if (motionEvent.getActionMasked() == MotionEvent.ACTION_DOWN)
-        {
-            // determine the number of the square pressed down
-            float x = motionEvent.getX();
-            float y = motionEvent.getY();
-
-            // check if a swap is possible
-            if (checkSwap(x, y))
-            {
-                // invalidate the current view
-                invalidate();
-
-                // return true
-                return true;
-            }
-        }
-
-        // if invalid touch or unable to swap keep view the same
-        return false;
-    }
-    /** onProgressChanged()
-     *
-     * This method tracks changes of the SeekBar and updates the board based on current progress
-     *
-     * @param seekBar - seekBar on the application
-     * @param size - the new size specified by the progress of the seekBar
-     * @param b - boolean from user
-     */
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int size, boolean b)
-    {
-        // if the size is larger than or equal to 3, reset the numbers of squares per row
-        // to the size specified and create a new board and the total number of squares
-        sqPerRow = Math.max(size, 3);
-
-        // update the new total number of squares
-        sqTotal = sqPerRow * sqPerRow - 1;
-
-        // invalidate the current view
-        invalidate();
-    }
-
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {}
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {}
 
     /* checkSwap
      *
@@ -469,6 +375,111 @@ public class BoardView extends SurfaceView
         // return the inversion count
             return count;
     }
+    
+    /* onDraw
+     *
+     * This method overrides the onDraw method to draw the squares accurately
+     * onto the current instance of the canvas. The canvas will be displayed
+     * onto the surface view object that the tablet has access to.
+     *
+     * @param canvas - the canvas that will be drawn onto the surface view
+     */
+    @Override
+    public void onDraw(Canvas canvas)
+    {
+        // if solved set background to green
+        if(!solved) backgroundColor.setColor(Color.WHITE);
+        else backgroundColor.setColor(Color.GREEN);
+
+        // draw the background of the board onto the surface view
+        canvas.drawRect(boardLeft, boardTop, boardLeft +boardWidth,
+            boardTop + boardWidth, backgroundColor);
+
+        // draw the squares onto the canvas
+        for(Square sq: board) sq.draw(canvas);
+
+    }
+
+    /* onClick
+     *
+     * This method overrides the onClick method to read when the user has
+     * clicked on the reset button. By doing this, the board will be re-initialized
+     * and the current view will be invalidated so the new canvas may be drawn.
+     *
+     * @param view - the view that will be overwritten
+     */
+    @Override
+    public void onClick(View view)
+    {
+        // generate the new board
+        initBoard();
+
+        // invalidate the current view
+        invalidate();
+    }
+
+    /* onTouch
+     *
+     * This method overrides the onTouch method to correctly calculate where the
+     * user is attempting to move the square. Since there is only one position
+     * the user can possible move the square to (as there is only one empty square)
+     * the coordinates the user presses on can be used to determine if it is next
+     * to an empty, and if it is, swap the squares.
+     *
+     * @param view - the current view where the user's touch will be found
+     * @param motionEvent - the motion event of the user
+     */
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent)
+    {
+        // verify the user pressed the screen
+        if (motionEvent.getActionMasked() == MotionEvent.ACTION_DOWN)
+        {
+            // determine the number of the square pressed down
+            float x = motionEvent.getX();
+            float y = motionEvent.getY();
+
+            // check if a swap is possible
+            if (checkSwap(x, y))
+            {
+                // invalidate the current view
+                invalidate();
+
+                // return true
+                return true;
+            }
+        }
+
+        // if invalid touch or unable to swap keep view the same
+        return false;
+    }
+    /* onProgressChanged()
+     *
+     * This method tracks changes of the SeekBar and updates the board based on current progress
+     *
+     * @param seekBar - seekBar on the application
+     * @param size - the new size specified by the progress of the seekBar
+     * @param b - boolean from user
+     */
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int size, boolean b)
+    {
+        // if the size is larger than or equal to 3, reset the numbers of squares per row
+        // to the size specified and create a new board and the total number of squares
+        sqPerRow = Math.max(size, 3);
+
+        // update the new total number of squares
+        sqTotal = sqPerRow * sqPerRow - 1;
+
+        // invalidate the current view
+        invalidate();
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {}
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {}
 }
 
 

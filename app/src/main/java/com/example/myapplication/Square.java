@@ -29,11 +29,12 @@ public class Square
     // create paint variables for the text and square color
     private Paint sqColor;
     private final Paint textColor;
+    private int totalSquares;
 
     /* Square Constructor
      * Initializes the instance/member variables for the square object.
      */
-    public Square(float left, float top, int row, int col, int number)
+    public Square(float left, float top, int row, int col, int number, int total)
     {
         // set the square's coordinates to the parameters passed in
         sqLeft = left;
@@ -42,8 +43,9 @@ public class Square
         // set the square size
         sqSize = 400;
 
-        // set the number of the square
+        // set the number of the square and total number of squares
         sqNumber = number;
+        totalSquares = total;
 
         // initialize the paint variables to red
         // (green indicates correct position/assuming initially incorrect)
@@ -70,6 +72,7 @@ public class Square
         this.sqTop = initSq.sqTop;
         this.sqSize = initSq.sqSize;
         this.sqNumber = initSq.sqNumber;
+        this.totalSquares = initSq.totalSquares;
         this.sqColor = new Paint(initSq.sqColor);
         this.textColor = new Paint(initSq.textColor);
     }
@@ -90,7 +93,7 @@ public class Square
         textColor.setTextSize(50);
 
         // draw the number onto the square
-        if (sqNumber != 16) {
+        if (sqNumber != totalSquares) {
             canvas.drawText(String.valueOf(sqNumber), sqLeft + sqSize / 2, sqTop + sqSize / 2, textColor);
         }
         else {

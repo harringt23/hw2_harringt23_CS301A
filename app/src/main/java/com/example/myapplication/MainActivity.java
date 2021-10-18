@@ -15,6 +15,15 @@
  * begins with the numbers randomly shuffled and the user must attempt
  * to slide the pieces into the correct orientation.
  *
+ * ENHANCEMENTS
+ 1. Instead of randomly initialing the puzzle at the start, randomly
+    initialize it with the restriction that the puzzle is winnable.
+    (There are certain initial configurations for which the puzzle is not winnable).
+
+ * 2. Write your program so that the size of the puzzle can be changed.
+   For example, a user could specify a 7x7 puzzle (with 48 numbered squares) or a
+   9x9 puzzle (with 80 numbered squares). It is up to you to decide how the user
+   should specify the puzzle size. I chose a minimum of 3 and maximum of 10.
  *
  * @author Brynn Harrington
  * @version October 17, 2021
@@ -34,6 +43,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.SeekBar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,5 +62,9 @@ public class MainActivity extends AppCompatActivity {
 
         // set up the touch listener for the board
         boardView.setOnTouchListener(boardView);
+
+        // set up the seek bar for the board
+        SeekBar seekBar = findViewById(R.id.numSqBoard);
+        seekBar.setOnSeekBarChangeListener(boardView);
     }
 }

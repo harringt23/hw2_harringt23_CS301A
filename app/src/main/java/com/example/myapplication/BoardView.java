@@ -117,8 +117,8 @@ public class BoardView extends SurfaceView
         }
 
 
-        // TODO - ADD BACK IN shuffle the board to create random numbering
-       // Collections.shuffle(sqNumbers);
+        // shuffle the board to create random numbering
+       Collections.shuffle(sqNumbers);
 
         // instantiate the list of squares via the randomly shuffled integers
         board = new ArrayList<>();
@@ -149,10 +149,6 @@ public class BoardView extends SurfaceView
                 sqIndex++;
             }
         }
-
-        /// TODO TESTING
-        Square swap = board.get(14);
-        swap(14, swap, 3, 2);
 
         // determine if any squares are in the correct position
         sqCorrectPosition();
@@ -218,7 +214,7 @@ public class BoardView extends SurfaceView
         if(!solved) backgroundColor.setColor(Color.WHITE);
         else backgroundColor.setColor(Color.GREEN);
 
-        // draw the backgroundof the board onto the surface view
+        // draw the background of the board onto the surface view
         canvas.drawRect(boardLeft, boardTop, boardLeft +boardWidth,
             boardTop + boardWidth, backgroundColor);
 

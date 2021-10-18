@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
@@ -24,7 +23,7 @@ import java.util.Collections;
  * the SeekBar is utilized to update the number of squares.
  *
  * @author Brynn Harrington
- * @version October 18, 2021
+ * @version October 17, 2021
  *
  */
 public class BoardView extends SurfaceView
@@ -376,7 +375,7 @@ public class BoardView extends SurfaceView
             if (blankSqRow - sqTapRow == 1) return true;
 
             // if below blank return true;
-            if (sqTapRow - blankSqRow == 1) return true;
+            return sqTapRow - blankSqRow == 1;
         }
 
         // otherwise return false

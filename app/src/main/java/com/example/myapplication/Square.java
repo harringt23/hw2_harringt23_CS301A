@@ -10,7 +10,7 @@ import android.graphics.Paint;
  * holds the properties of its position and the number value it has.
  *
  * @author Brynn Harrington
- * @version October 4, 2021
+ * @version October 17, 2021
  *
  */
 public class Square

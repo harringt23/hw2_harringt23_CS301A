@@ -17,26 +17,52 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#FDFDFD"
-            android:text="@string/_15_squares_game" />
+            android:gravity="center"
+            android:text="@string/_15_squares_game"
+            android:textAllCaps="true"
+            android:textColor="#FF0000"
+            android:textColorHighlight="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            tools:ignore="TextContrastCheck" />
 
-        <Button
-            android:id="@+id/reset_button"
+        <TextView
+            android:id="@+id/slider_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/reset" />
+            android:gravity="center"
+            android:text="@string/slide_to_change_size_of_board"
+            android:textAllCaps="true"
+            android:textColor="#000000"
+            android:textSize="14sp" />
 
         <SeekBar
             android:id="@+id/numSqBoard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:max="10"
-            android:progress="4" />
+            android:indeterminateTint="#FF0000"
+            android:max="6"
+            android:progress="3"
+            android:progressBackgroundTint="#FF0000"
+            android:thumbTint="#FF0000" />
 
         <com.example.myapplication.BoardView
             android:id="@+id/boardView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#ffffff"/>
+
+        <Button
+            android:id="@+id/reset_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/holo_red_dark"
+            android:backgroundTint="#FF0000"
+            android:backgroundTintMode="add"
+            android:text="@string/reset"
+            android:textColor="#000000"
+            app:iconTint="#732121"
+            tools:ignore="TextContrastCheck" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

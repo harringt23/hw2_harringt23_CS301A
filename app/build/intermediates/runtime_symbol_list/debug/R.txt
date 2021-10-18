@@ -2192,6 +2192,7 @@ int id sin 0x7f08016d
 int id skipCollapsed 0x7f08016e
 int id skipped 0x7f08016f
 int id slide 0x7f080170
+int id slider_text 0x7f0801d6
 int id snackbar_action 0x7f080171
 int id snackbar_text 0x7f080172
 int id snap 0x7f080173
@@ -2554,6 +2555,7 @@ int string path_password_eye_mask_visible 0x7f0e0066
 int string path_password_strike_through 0x7f0e0067
 int string reset 0x7f0e0068
 int string search_menu_title 0x7f0e0069
+int string slide_to_change_size_of_board 0x7f0e006b
 int string status_bar_notification_info_overflow 0x7f0e006a
 int style AlertDialog_AppCompat 0x7f0f0000
 int style AlertDialog_AppCompat_Light 0x7f0f0001

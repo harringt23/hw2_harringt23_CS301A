@@ -2193,6 +2193,7 @@ id sin
 id skipCollapsed
 id skipped
 id slide
+id slider_text
 id snackbar_action
 id snackbar_text
 id snap
@@ -2555,6 +2556,7 @@ string path_password_eye_mask_visible
 string path_password_strike_through
 string reset
 string search_menu_title
+string slide_to_change_size_of_board
 string status_bar_notification_info_overflow
 style AlertDialog_AppCompat
 style AlertDialog_AppCompat_Light

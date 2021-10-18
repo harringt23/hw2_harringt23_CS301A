@@ -2,4 +2,5 @@
     <string name="app_name">My Application</string>
     <string name="reset">RESET</string>
     <string name="_15_squares_game">15-Squares Game</string>
+    <string name="slide_to_change_size_of_board">Slide to Change Size of Board</string>
 </resources>

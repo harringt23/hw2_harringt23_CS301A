@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.SeekBar;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -18,20 +20,24 @@ import java.util.Collections;
  * are instantiated and responded to in this class to correctly display
  * the board to the user. This class extends both OnClickListener and
  * OnTouchListener to accurately process the data the user is sending to
- * the tablet and implement the correct response according to that.
+ * the tablet and implement the correct response according to that. Additionally,
+ * the SeekBar is utilized to update the number of squares.
  *
  * @author Brynn Harrington
- * @version October 4, 2021
+ * @version October 18, 2021
  *
  */
 public class BoardView extends SurfaceView
-        implements View.OnClickListener, View.OnTouchListener
+        implements View.OnClickListener, View.OnTouchListener, SeekBar.OnSeekBarChangeListener
 {
     /* Constant Variables */
     // initialize the width, top, and left of the board
     private final int boardWidth = 1800;
     private final float boardTop = 25;
     private final float boardLeft = 25;
+
+    // initialize the square size
+    private final int sqSize;
 
     // initialize the background color of the board
     private final Paint backgroundColor = new Paint();
@@ -42,10 +48,10 @@ public class BoardView extends SurfaceView
 
 
     /* Instance/Member Variables */
-    // initialize the size of the rows, board, and each square size
-    private final int sqPerRow;
-    private final int sqTotal;
-    private final int sqSize;
+    // initialize the size of the rows and board
+    private int sqPerRow;
+    private int sqTotal;
+
 
     // initialize a new array of squares in the game (16 squares on the board)
     private ArrayList<Square> board;
@@ -274,6 +280,33 @@ public class BoardView extends SurfaceView
         // if invalid touch or unable to swap keep view the same
         return false;
     }
+    /** onProgressChanged()
+     *
+     * This method tracks changes of the SeekBar and updates the board based on current progress
+     *
+     * @param seekBar - seekBar on the application
+     * @param size - the new size specified by the progress of the seekBar
+     * @param b - boolean from user
+     */
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int size, boolean b)
+    {
+        // if the size is larger than or equal to 3, reset the numbers of squares per row
+        // to the size specified and create a new board and the total number of squares
+        sqPerRow = Math.max(size, 3);
+
+        // update the new total number of squares
+        sqTotal = sqPerRow * sqPerRow - 1;
+
+        // invalidate the current view
+        invalidate();
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {}
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {}
 
     /* checkSwap
      *

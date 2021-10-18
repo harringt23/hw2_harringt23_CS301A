@@ -31,7 +31,7 @@ public class BoardView extends SurfaceView
 {
     /* Constant Variables */
     // initialize the width, top, and left of the board
-    private final int boardWidth = 1800;
+    private final int boardWidth = 1100;
     private final float boardTop = 25;
     private final float boardLeft = 25;
 
@@ -133,10 +133,10 @@ public class BoardView extends SurfaceView
             {
                 // initialize new variables to track the new coordinates
                 float newLeft = boardLeft + sqSize * col;
-                float newTop = boardTop +sqSize * row;
+                float newTop = boardTop + sqSize * row;
 
                 // add the new square to the board
-                board.add(new Square(newLeft, newTop, row, col, sqNumbers.get(sqIndex), sqTotal));
+                board.add(new Square(newLeft, newTop, sqNumbers.get(sqIndex), sqSize, sqTotal));
 
                 // determine the current values of the blank square
                 if (sqNumbers.get(sqIndex) == sqTotal)
@@ -155,17 +155,6 @@ public class BoardView extends SurfaceView
 
         // determine if any squares are in the correct position
         sqCorrectPosition();
-    }
-
-    /* getNumSquares
-     *
-     * This function returns the number of the squares on the board
-     *
-     * @return the number of squares on the board
-     * */
-    public int getNumSquares()
-    {
-        return sqTotal + 1;
     }
 
     /* sqCorrectPosition

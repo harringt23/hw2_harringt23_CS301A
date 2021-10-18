@@ -21,7 +21,7 @@ public class Square
     private float sqTop;
 
     // initialize square size
-    private int sqSize;
+    private float sqSize;
 
     // track what number is on the tile
     private int sqNumber;
@@ -29,19 +29,21 @@ public class Square
     // create paint variables for the text and square color
     private Paint sqColor;
     private final Paint textColor;
+
+    // create a variable for the total number of squares
     private int totalSquares;
 
     /* Square Constructor
      * Initializes the instance/member variables for the square object.
      */
-    public Square(float left, float top, int row, int col, int number, int total)
+    public Square(float left, float top, int number, float size, int total)
     {
         // set the square's coordinates to the parameters passed in
         sqLeft = left;
         sqTop = top;
 
-        // set the square size
-        sqSize = 400;
+        // set the square size based on the board size and number of rows
+        sqSize = size;
 
         // set the number of the square and total number of squares
         sqNumber = number;
@@ -87,17 +89,17 @@ public class Square
     public void draw(Canvas canvas)
     {
         // draw the square onto the canvas based on the coordinates
-        canvas.drawRect(sqLeft, sqTop, sqLeft + sqSize, sqTop + sqSize, sqColor);
+        canvas.drawRect(sqLeft + 10, sqTop + 10, sqLeft + sqSize - 10, sqTop + sqSize - 10, sqColor);
 
         // set the text size to
         textColor.setTextSize(50);
 
         // draw the number onto the square
         if (sqNumber != totalSquares) {
-            canvas.drawText(String.valueOf(sqNumber), sqLeft + sqSize / 2, sqTop + sqSize / 2, textColor);
+            canvas.drawText(String.valueOf(sqNumber), sqLeft + (int) (sqSize / 2), sqTop + (int) (sqSize / 2), textColor);
         }
         else {
-            canvas.drawText("", sqLeft + sqSize / 2, sqTop + sqSize / 2, textColor);
+            canvas.drawText("", sqLeft + (int) (sqSize / 2), sqTop + (int) (sqSize / 2), textColor);
         }
     }
 
